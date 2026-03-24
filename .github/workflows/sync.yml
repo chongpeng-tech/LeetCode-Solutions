@@ -1,20 +1,20 @@
 name: LeetCode Sync
 
 on:
-  workflow_dispatch: # 允许我们手动点击按钮来测试机器人
+  workflow_dispatch:
   schedule:
-    - cron: "0 16 * * *" # 定时闹钟：每天 UTC 时间 16 点（相当于北京时间每天凌晨 0 点）自动运行
+    - cron: "0 16 * * *" 
 
 jobs:
   build:
-    runs-on: ubuntu-latest # 给机器人分配一台最新的 Ubuntu Linux 云电脑
+    runs-on: ubuntu-latest
 
     steps:
       - name: Sync LeetCode CN
-        uses: jared-hughes/leetcode-sync@v3.3 # 使用社区里写好的开源搬运工具
+        uses: joshcai/leetcode-sync@v1.7 # 🌟 这里换成了最稳定、最主流的开源工具
         with:
-          github-token: ${{ github.token }} # 允许机器人往你的仓库里写文件
-          leetcode-csrf-token: ${{ secrets.LEETCODE_CSRF_TOKEN }} # 从保险箱拿第二把钥匙
-          leetcode-session: ${{ secrets.LEETCODE_SESSION }} # 从保险箱拿第一把钥匙
-          destination-folder: my-leetcode-code # 你的代码拉下来后，会存放在这个文件夹里
-          leetcode-url: https://leetcode.cn # 告诉机器人去力扣中文站，而不是美国站
+          github-token: ${{ github.token }}
+          leetcode-csrf-token: ${{ secrets.LEETCODE_CSRF_TOKEN }}
+          leetcode-session: ${{ secrets.LEETCODE_SESSION }}
+          destination-folder: my-leetcode-code 
+          leetcode-url: https://leetcode.cn
