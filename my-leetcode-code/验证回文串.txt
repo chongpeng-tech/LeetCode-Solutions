@@ -1,0 +1,41 @@
+bool isAlphaNum(char c){
+    return (c >= '0'&& c <= '9')||(c >= 'a'&& c <= 'z')||(c >= 'A'&& c <= 'Z');
+}
+char getLowerChar(char c){
+    if(c >= 'A'&& c <= 'Z'){
+        return c + 32;
+    }
+    return c;
+}
+bool isPalindrome(char* s) {
+    if(s == NULL){
+        return true;
+    }
+  
+    int len_s = strlen(s);
+    int front = 0;
+    int rear = len_s - 1;
+    while(rear > front){
+        if(!isAlphaNum(s[front])){
+            front++;
+            continue;
+        }
+        if(!isAlphaNum(s[rear])){
+            rear--;
+            continue;
+        }
+        if(rear < front){
+            break;
+        }
+        //int temp = abs(s[rear] - s[front]);
+        char temp_front = getLowerChar(s[front]);
+        char temp_rear = getLowerChar(s[rear]);
+        if((int)temp_front == (int)temp_rear){
+            rear--;
+            front++;
+        }else{
+            return false;
+        }
+    }
+    return true;
+}
