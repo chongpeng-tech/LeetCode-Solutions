@@ -1,0 +1,59 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+/*
+struct ListNode* reverseList(struct ListNode* head) {
+    if(head==NULL||head->next==NULL){
+        return head;
+    }
+    struct ListNode* currentNode = head;
+    int len_List = 1;
+    while(currentNode->next!=NULL){
+        currentNode = currentNode->next;
+        len_List++;
+    }
+    
+    int right = len_List-1;
+    int Arr[len_List];//数组定义是几个元素就有几个元素，不用去计算的
+    currentNode = head;
+    for(int i = 0;i<len_List;i++){
+        Arr[i] = currentNode->val;
+        currentNode = currentNode->next;
+    }
+    currentNode = head;
+    for(int i = 0;i<(len_List)/2;i++){
+        int temp =Arr[i];
+        Arr[i] = Arr[right];
+        Arr[right] = temp;
+        right--;
+    }
+    for(int i = 0;i<len_List;i++){
+        currentNode->val = Arr[i];
+        currentNode = currentNode->next;
+    }
+    return head;
+}
+*/
+struct ListNode* reverseList(struct ListNode* head) {
+    if(head==NULL||head->next==NULL){
+        return head;
+    }
+    struct ListNode* prev = NULL;
+    struct ListNode* currentNode = head;
+    struct ListNode* nextNode = head->next;
+    while(1){
+        currentNode->next = prev;
+        prev = currentNode;
+        if(nextNode==NULL){
+            break;
+        }
+        currentNode = nextNode;
+        nextNode = nextNode->next;
+
+    }
+    return currentNode;
+}

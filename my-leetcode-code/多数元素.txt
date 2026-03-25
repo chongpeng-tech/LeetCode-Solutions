@@ -1,0 +1,18 @@
+int majorityElement(int* nums, int numsSize) {
+    int majorityElement;
+    int sign = 0;
+    for(int i = 0;i<numsSize;i++){
+        if(sign==0){
+            //if语句的排序非常重要
+            majorityElement = nums[i];
+        }
+        if(majorityElement==nums[i]){
+            sign = sign + 1;
+        }
+        if(majorityElement!=nums[i]){
+            sign = sign - 1;
+           
+        }
+    }
+    return majorityElement;
+}

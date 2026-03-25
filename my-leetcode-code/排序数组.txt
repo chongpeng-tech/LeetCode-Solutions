@@ -1,0 +1,89 @@
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+//这题可以试试快排
+void quicksort(int* array,int head,int rear){
+    //递归一定要写出口
+    if(head>=rear){
+        return;
+    }
+    int left = head;
+    int right = rear;
+    int pivot = array[left];
+    while(left<right){
+        //快排是while嵌套while然后递归
+        while(left<right&&array[right]>=pivot){
+            right--;
+        }
+        array[left] = array[right];
+        //left++;
+        while(left<right&&array[left]<=pivot){
+            left++;
+        }
+        array[right] = array[left];
+        //right--;
+        //无需移动指针
+    }
+    array[left] = pivot;
+    quicksort(array,head,left-1);
+    quicksort(array,left+1,rear);
+}
+
+
+
+/*堆排序
+*array是要堆化的数组名称
+arraySize是数组的大小
+index是待维护堆的下标
+*/
+void swap(int *a, int *b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+void heapify(int* array,int arraySize,int index){
+    while(1){
+     int largest = index;//假设最大数的下标就为堆顶
+     int leftSon = index*2 + 1;//左孩子的下标，从0开始
+     int rightSon = index*2 + 2;//右孩子下标
+  if(leftSon<arraySize&&array[largest]<array[leftSon]){
+    largest = leftSon;
+    }
+  if(rightSon<arraySize&&array[largest]<array[rightSon]){
+    largest = rightSon;
+   }
+   if(largest!=index){
+    swap(&array[index],&array[largest]);
+    index = largest;
+   }else{
+    break;
+   }
+  }
+}
+//以大顶堆为基础完成升序排序
+//父节点下标计算公式 (下标-1)/2 c语言自动向下取整
+void heapsort(int* array,int arraySize){
+    //首先要建堆然后堆化,从完全二叉树最后一个节点开始
+    for(int i = (arraySize-2)/2;i>=0;i--){//堆要逐渐往上走
+        heapify(array,arraySize,i);
+    }
+    //完成堆排序
+    for(int i = arraySize-1;i>0;i--){
+        swap(&array[i],&array[0]);
+        heapify(array,i,0);
+    }
+}
+int* sortArray(int* nums, int numsSize, int* returnSize) {
+    *returnSize = numsSize;    
+    if (numsSize == 0) return NULL;
+    
+    // 1. 正确分配内存并复制原数组数据
+    int* result = (int*)malloc(sizeof(int) * numsSize);
+    for (int i = 0; i < numsSize; i++) {
+        result[i] = nums[i];  // 复制数据到新内存
+    }
+    //quicksort(result,0,numsSize-1);
+    heapsort(result, numsSize);
+    //快排无法通过，堆排序可通过
+    return result;  // 返回新数组
+}

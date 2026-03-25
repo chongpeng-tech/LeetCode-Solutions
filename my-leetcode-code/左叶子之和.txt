@@ -1,0 +1,70 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+//迭代做法
+bool isLeave(struct TreeNode* node){
+    if(node->left==NULL&&node->right==NULL){
+        return true;
+    }else{
+        return false;
+    }
+}
+int sumOfLeftLeaves(struct TreeNode* root){
+    if(root==NULL){
+        return 0;
+    }
+    struct TreeNode* currentNode = root;
+    struct TreeNode** queue = (struct TreeNode**)malloc(sizeof(struct TreeNode*)*2000);
+    int front = 0;
+    int rear = 0;
+    int sum = 0;
+    queue[rear++] = currentNode;
+    while(front<rear){
+    struct TreeNode* node = queue[front++];
+    if(node->left){
+        if(isLeave(node->left)){
+            sum += (node->left)->val;
+        }else{
+            queue[rear++]  =node->left;            
+        }   
+      
+    }
+    if(node->right){
+       queue[rear++] = node->right;
+
+    }
+    }
+    return sum;
+}
+
+//递归做法
+/*void preorder(struct TreeNode* root,int* sum){
+    if(root==NULL){
+        return;
+    }
+    struct TreeNode* node = root;
+   
+    if(node->left!=NULL&&(node->left)->left==NULL&&(node->left)->right==NULL){
+        (*sum) = (*sum) + (node->left)->val;
+    }
+    preorder(node->left,sum);
+    preorder(node->right,sum);
+}
+
+int sumOfLeftLeaves(struct TreeNode* root) {
+    if(root==NULL){
+        return 0;
+    }
+    struct TreeNode* currentNode = root;
+    int* sum = (int*)malloc(sizeof(int));
+    *sum = 0;
+    preorder(currentNode,sum);
+    int result = *sum;
+    return result;
+}
+*/

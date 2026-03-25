@@ -1,0 +1,41 @@
+//这题先优先用排序算法解决
+void quicksort(int nums[],int low,int high){
+    if(low>=high){//递归要写终止条件！
+        return;
+    }
+    int left = low;
+    int right = high;
+    int pivot = nums[left];
+    int mid;
+    while(left<right){
+        //int pivot = nums[low];
+        //不要在循环里面定义东西！
+        while(nums[right]>=pivot&&right>left){
+            right--;//非逆排序元素都跳过
+        }
+        nums[left] = nums[right];
+      
+
+
+        while(nums[left]<=pivot&&left<right){
+           left++;
+        }
+        nums[right] = nums[left];
+       
+        if(left==right){
+            nums[left] = pivot;
+            mid = left;
+        }
+       
+       
+
+
+
+
+        }
+    quicksort(nums,low,mid-1);
+    quicksort(nums,mid+1,high);
+}
+void sortColors(int* nums, int numsSize) {
+    quicksort(nums,0,numsSize-1);
+}

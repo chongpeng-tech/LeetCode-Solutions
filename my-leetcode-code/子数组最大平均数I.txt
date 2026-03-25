@@ -1,0 +1,18 @@
+double findMaxAverage(int* nums, int numsSize, int k) {
+  
+    double tempsum=0;//没初始化就会出大问题！
+    for(int i = 0;i<k;i++){
+        tempsum = tempsum + nums[i];
+    }
+   double maxsum = tempsum;
+   int i = 0;
+    while(i<numsSize-k){
+        ++i;
+        tempsum = tempsum + nums[i+k-1] - nums[i-1];
+        if(tempsum>maxsum){
+            maxsum = tempsum;
+        }
+    }
+    double maxAverage = maxsum/k;
+    return maxAverage;    
+}

@@ -1,0 +1,41 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+//可以看作是对层序遍历的魔改
+int* rightSideView(struct TreeNode* root, int* returnSize) {
+    (*returnSize) = 0;//初始化要放在最前面！！
+    if(root==NULL){
+        return NULL;
+    }
+    
+    struct TreeNode** queue = (struct TreeNode**)malloc(10000*sizeof(struct TreeNode*));
+    int front = 0;
+    int rear = 0;
+    queue[rear++] = root;
+    int* result = (int*)malloc(5000*sizeof(int));
+    while(front<rear){
+        int levelSize = rear - front;
+       struct TreeNode* lastNode = NULL;
+        for(int i = 0;i<levelSize;i++){//目的性的前进
+            struct TreeNode* currentNode = queue[front++];
+            lastNode = currentNode;
+            if(currentNode->left!=NULL){
+                queue[rear++] = currentNode->left;
+            }
+            if(currentNode->right!=NULL){
+                queue[rear++] = currentNode->right;
+            }
+           
+        } 
+        result[(*returnSize)++] = lastNode->val;
+    }
+    return result;
+}

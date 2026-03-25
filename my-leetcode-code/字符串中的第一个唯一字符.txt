@@ -1,0 +1,29 @@
+int firstUniqChar(char* s) {
+    int len = strlen(s);
+    char firstUniqChar;
+    int sign;//符号记录
+    int index;  
+    int i = 0;
+    while(i<len)//没要求时间和空间复杂度，随便用
+    {   
+        sign = 1;
+        firstUniqChar = s[i];
+        index = -1;       
+        for(int j = 0;j<len;j++){
+            if(firstUniqChar==s[j]&&i!=j){
+                sign = -1;
+                break;
+            }
+        }
+        if(sign==1){
+            index = i;
+            break;
+        }
+        if(sign==-1){
+           
+            i++;
+            
+        }
+    }
+    return index;
+}

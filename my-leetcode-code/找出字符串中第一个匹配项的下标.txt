@@ -1,0 +1,46 @@
+//先计算出next数组
+void getNext(int next[],char* needle,int len){
+    int i = 1;
+    int k = 0;
+    next[0] = 0;
+    while(i<len){
+        if(needle[i]==needle[k]){
+            next[i] = k + 1;
+            k++;
+            i++;
+        }else if(needle[i]!=needle[k]){
+            if(k!=0){
+                k = next[k-1];
+            }else if(k==0){
+                next[i] = 0;
+                i++;
+            }
+        }
+    }
+}
+int strStr(char* haystack, char* needle) {
+    int len_haystack = strlen(haystack);
+    int len_needle = strlen(needle);
+    int next[len_needle];
+    int i = 0;//haystack指针
+    int j = 0;//needle指针
+    getNext(next,needle,len_needle);
+    while(i<len_haystack&&j<len_needle){
+        if(haystack[i]==needle[j]){
+            //匹配上了，皆大欢喜，直接ij++然后判断是否完成匹配
+            i++;
+            j++;
+            if(j==len_needle){
+                return i-j;
+            }
+        }else{
+                   //没有匹配上，就要分类讨论了！
+                if(j>0){
+                     j = next[j-1];                  
+                }else{
+                    i++;
+                }   
+            }
+    }
+    return -1;
+}

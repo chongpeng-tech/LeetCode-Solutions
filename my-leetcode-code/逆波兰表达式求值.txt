@@ -1,0 +1,67 @@
+typedef struct stacknode{
+    int data;
+    struct stacknode* next;
+}stacknode;
+typedef struct{
+    stacknode* top;
+}LinkStack;
+void InitStack(LinkStack* ls){
+    ls-> top = NULL;
+}
+void push(LinkStack* ls,int x){
+    stacknode* node = (stacknode*)malloc(sizeof(stacknode));
+    node->data = x;
+    node->next = ls->top;
+    ls->top = node;
+}
+bool IsEmpty(LinkStack* ls){
+    if(ls->top!=NULL){
+        return true;
+    }else{
+        return false;
+    }
+}
+int pop(LinkStack* ls){
+    stacknode* p = ls->top;
+    int returnNum = (ls->top)->data;
+    ls->top = (ls->top)->next;
+    free(p);
+    return returnNum;
+}
+int evalRPN(char** tokens, int tokensSize) {
+    LinkStack* ls = (LinkStack*)malloc(sizeof(LinkStack));
+    InitStack(ls);
+    for(int i = 0; i < tokensSize; i++){
+        char* currentToken = tokens[i];
+        if(strcmp(currentToken,"+")==0||
+           strcmp(currentToken,"-")==0||
+           strcmp(currentToken,"*")==0||
+           strcmp(currentToken,"/")==0){
+            if(strcmp(currentToken,"+")==0){
+                int nums1 = pop(ls);
+                int nums2 = pop(ls);
+                push(ls,(nums1+nums2));
+            }
+            else if(strcmp(currentToken,"-")==0){
+                int nums1 = pop(ls);
+                int nums2 = pop(ls);
+                push(ls,(nums2-nums1));
+            }else if(strcmp(currentToken,"*")==0){
+                int nums1 = pop(ls);
+                int nums2 = pop(ls);
+                push(ls,(nums1*nums2));
+            }else if(strcmp(currentToken,"/")==0){
+                int nums1 = pop(ls);
+                int nums2 = pop(ls);
+                push(ls,(nums2/nums1));
+            }
+                
+
+           }else{
+            int nums = atoi(currentToken);
+            push(ls,nums);
+           }
+    }
+    int result = (ls->top)->data;
+    return result;
+}//可以不写链栈的！

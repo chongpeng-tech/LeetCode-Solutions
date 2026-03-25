@@ -1,0 +1,85 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+//反转链表
+struct ListNode* reverseList(struct ListNode* head) {
+    if(head==NULL||head->next==NULL){
+        return head;
+    }
+    struct ListNode* prev = NULL;
+    struct ListNode* currentNode = head;
+    struct ListNode* nextNode = head->next;
+    while(1){
+        currentNode->next = prev;
+        prev = currentNode;
+        if(nextNode==NULL){
+            break;//什么时候终止很重要（快排？）
+        }
+        currentNode = nextNode;
+        nextNode = nextNode->next;
+
+    }
+    return currentNode;
+}
+//找中间节点
+struct ListNode* middleNode(struct ListNode* head) {
+    int len_list = 0;
+    struct ListNode* currerntNode = head;
+    if(head->next==NULL){
+        return head;
+    }
+    //先找出链表的长度
+    while(currerntNode!=NULL){
+        currerntNode = currerntNode->next;
+        len_list++;
+    }
+    if(len_list%2!=0){
+        //基数个节点，返回中间的节点
+        currerntNode = head;
+        for(int i = 0;i<len_list/2;i++){
+            currerntNode = currerntNode->next;
+        }
+        return currerntNode;
+    }else{
+        //偶数个节点返回第二个中间节点
+        currerntNode = head;
+        for(int i = 0;i<len_list/2;i++){
+            currerntNode = currerntNode->next;
+        }
+        return currerntNode;
+    }
+
+}
+//
+void reorderList(struct ListNode* head) {
+    if(head==NULL||head->next==NULL){
+        return;
+    }
+    struct ListNode* midNode = middleNode(head);
+    struct ListNode* newHead = reverseList(midNode);
+    struct ListNode* p1 = head;
+    struct ListNode* p2 = newHead;
+    struct ListNode* nummyNode = (struct ListNode*)malloc(sizeof(struct ListNode));
+    nummyNode->next = NULL;
+    struct ListNode* prev = nummyNode;
+    
+    while(p2!=NULL&&p1!=NULL&&p1!=p2){
+    //逻辑正确，但是循环条件出了问题！
+    prev->next = p1;
+    prev = p1;
+    if(p1!=NULL){
+    p1 = p1->next;    
+    }
+    prev->next = p2;
+    prev = p2;
+    if(p2!=NULL){
+    p2 = p2->next;
+    }
+    }
+    head = nummyNode->next;
+    free(nummyNode);
+}

@@ -1,0 +1,16 @@
+int searchNum(int* nums,int target,int left,int right){
+    if(left>right){
+        return left;
+    }
+    int mid = left + (right - left)/2;
+    if(nums[mid]==target){
+        return mid;
+    }else if(nums[mid]>target){
+        return searchNum(nums,target,left,mid-1);
+    }else{
+        return searchNum(nums,target,mid+1,right);
+    }
+}
+int searchInsert(int* nums, int numsSize, int target) {
+    return searchNum(nums,target,0,numsSize-1);
+}

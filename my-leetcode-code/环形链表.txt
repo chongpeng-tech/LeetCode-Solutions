@@ -1,0 +1,25 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+bool hasCycle(struct ListNode *head) {
+    if(head==NULL||head->next==NULL){
+        return false;
+    }
+   struct ListNode* slowPointer = head;
+   struct ListNode* quickPointer = head->next;
+   while(slowPointer!=NULL&&quickPointer!=NULL){
+    if(slowPointer==quickPointer){
+        return true;
+    }
+    slowPointer = slowPointer->next;
+    quickPointer = quickPointer->next;
+    if(quickPointer!=NULL){
+        quickPointer = quickPointer->next;
+    }
+   }
+   return false;
+}

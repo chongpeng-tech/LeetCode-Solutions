@@ -1,0 +1,26 @@
+//此题的关键就是寻找分断点
+int findMin(int* nums, int numsSize) {
+    //先排除特殊情况
+    if(nums==NULL||numsSize==0){
+        return -1;
+    }
+    if(numsSize==1){
+        return nums[0];
+    }
+    int left = 0;
+    int right = numsSize - 1;
+    if (nums[left] < nums[right]) {
+        return nums[left];
+    } else {
+        // 否则找分界点
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] > nums[right]) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+     return nums[left];      
+    }
+}

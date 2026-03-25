@@ -1,0 +1,77 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+/**
+ * Return an array of arrays of size *returnSize.
+ * The sizes of the arrays are returned as *returnColumnSizes array.
+ * Note: Both returned array and *columnSizes array must be malloced, assume
+ * caller calls free().
+ */
+int** zigzagLevelOrder(struct TreeNode* root, int* returnSize,
+                       int** returnColumnSizes) {
+    *returnSize = 0;
+    if (root == NULL) {
+        return NULL;
+    }
+
+    struct TreeNode** queue =
+        (struct TreeNode**)malloc(sizeof(struct TreeNode*) * 10000);
+    int** result = (int**)malloc(sizeof(int*) * 10000);
+    *returnColumnSizes = (int*)malloc(sizeof(int) * 10000);
+    int front = 0;
+    int rear = 0;
+    queue[rear++] = root;
+    int flag = 0;
+    while (rear > front) {
+        int levelSize = rear - front;
+        int* currentLevelNodeVal = (int*)malloc(sizeof(int) * levelSize);
+        if (flag == 0) {
+            for (int i = 0; i < levelSize; i++) {
+                struct TreeNode* node = queue[front++];
+                currentLevelNodeVal[i] = node->val;
+                if (node->left != NULL) {
+                    queue[rear++] = node->left;
+                }
+                if (node->right != NULL) {
+                    queue[rear++] = node->right;
+                }
+            }
+            flag = 1;
+            result[*returnSize] = currentLevelNodeVal;
+            (*returnColumnSizes)[*returnSize] = levelSize;
+            (*returnSize)++;
+            continue;
+        }
+        if (flag == 1) {
+            int j = levelSize - 1;
+            for (int i = 0; i < levelSize; i++) {
+                struct TreeNode* node = queue[front++];
+                currentLevelNodeVal[j--] = node->val;
+                if (node->left != NULL) {
+                    queue[rear++] = node->left;
+                }
+                if (node->right != NULL) {
+                    queue[rear++] = node->right;
+                }
+            }
+            flag = 0;
+            result[*returnSize] = currentLevelNodeVal;
+            (*returnColumnSizes)[*returnSize] = levelSize;
+            (*returnSize)++;
+            continue;
+        }
+    }
+    free(queue);
+
+    // 调整结果数组大小为实际需要的大小(不调整也行)
+    result = (int**)realloc(result, sizeof(int*) * (*returnSize));
+    *returnColumnSizes =
+        (int*)realloc(*returnColumnSizes, sizeof(int) * (*returnSize));
+
+    return result;
+}

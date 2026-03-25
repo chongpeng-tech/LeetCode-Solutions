@@ -1,0 +1,38 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+//二叉树节点计数函数
+int countNodes(struct TreeNode* root){
+    if(root==NULL){
+        return 0;
+    }else{
+        return 1 + countNodes(root->left) + countNodes(root->right);
+    }
+}
+void inorder(struct TreeNode* root,int array[],int* index){
+    if(root!=NULL){
+        //int* index index前面的int*是说明index的参数类型，index已经是一个地址了，就不要再去用＆index (相当于int**)
+        //左根右顺序填充记录数组的值
+        inorder(root->left,array,index);
+        array[(*index)] = root->val;//需要解引用
+        (*index)++;
+        //相当于王道的“print”打印操作
+        inorder(root->right,array,index);
+    }
+}
+
+int* inorderTraversal(struct TreeNode* root, int* returnSize) {
+    (*returnSize) = countNodes(root);
+    int* array = (int*)malloc((*returnSize*sizeof(int)));
+    int index = 0;
+    inorder(root,array,&index);
+    return array;
+}

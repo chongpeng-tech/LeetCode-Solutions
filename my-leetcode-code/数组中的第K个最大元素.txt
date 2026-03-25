@@ -1,0 +1,44 @@
+void swap(int* a,int* b){
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+void heapify(int* array,int arraySize,int index){
+//对数组进行堆化,迭代方式
+    while(1){
+        int largest = index;
+        int leftSon = index*2 + 1;
+        int rightSon = index*2 + 2;
+        if(leftSon<arraySize&&array[largest]<array[leftSon]){
+            largest = leftSon;
+        }
+        if(rightSon<arraySize&&array[largest]<array[rightSon]){
+            largest = rightSon;
+        }
+        if(largest!=index){
+            swap(&array[index],&array[largest]);
+            index = largest;
+        }else{
+            break;
+        }
+    }
+}
+//可以稍微魔改一下，传参k进来
+void heapSort(int* array,int arraySize,int k){
+    //把未排序的未知数组的所有父节点堆化
+    for(int i = (arraySize-2)/2;i>=0;i--){
+        heapify(array,arraySize,i);
+    }
+    //形成大根堆之后进行堆排序
+    for(int i = arraySize-1;i>arraySize-k-1;i--){
+        swap(&array[i],&array[0]);
+        //下一步是堆排序时间复杂度低的精髓
+//只需从根节点往下维护即可，其他没受交换影响的分支无需重新维护堆，因为第一次就已经建好堆了
+    //记得要剪枝操作！
+        heapify(array,i,0);
+    }
+}
+int findKthLargest(int* nums, int numsSize, int k) {
+    heapSort(nums,numsSize,k);
+    return nums[numsSize-k];    
+}

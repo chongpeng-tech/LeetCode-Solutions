@@ -1,0 +1,42 @@
+// 判断是否为同为不同顺序的排列子列
+bool isConbination(char* s1, char* s2, int len_s1, int len_s2, int hashArr_s1[],
+                   int i) {
+    // s1是需要验证的列
+    int tempHashArr[26];
+    memcpy(tempHashArr,hashArr_s1,sizeof(tempHashArr));
+    if (i > (len_s2 - len_s1)) {
+        return false;
+    }
+    for (int j = 0; j < len_s1; j++) {
+        int index = s2[i + j] - 'a';
+        tempHashArr[index]--;
+    }
+    for (int k = 0; k < 26; k++) {
+        if (tempHashArr[k] != 0) {
+            return false;
+        }
+    }
+    return true;
+}
+bool checkInclusion(char* s1, char* s2) {
+    int len_s1 = strlen(s1);
+    int len_s2 = strlen(s2);
+    int i = 0;
+    // 预处理s1，建立哈希表
+    int hashArr_s1[26] = {0};
+    for (int i = 0; i < len_s1; i++) {
+        int index = s1[i] - 'a';
+        hashArr_s1[index]++;
+    }
+    // 预处理要对比的子列tempHashArr
+
+    while (i <=len_s2 - len_s1) {
+        if (isConbination(s1, s2, len_s1, len_s2, hashArr_s1, i)) {
+            return true;
+            break;
+        } else {
+            i++;
+        }
+    }
+    return false;
+}

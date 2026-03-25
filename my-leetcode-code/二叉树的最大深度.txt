@@ -1,0 +1,33 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+bool isleafNode(struct TreeNode* node){
+    if(node->left==NULL&&node->right==NULL){
+        return true;
+    }else
+    {
+        return false;
+    }
+}
+int maxNum(int a,int b){
+    if(a>=b){
+        return a;
+    }else{
+        return b;
+    }
+} 
+int maxDepth(struct TreeNode* root) {
+    struct TreeNode* currentNode = root;
+    if(currentNode==NULL){
+        return 0;
+    }
+    if(isleafNode(currentNode)){
+        return 1;
+    }
+    return 1+maxNum(maxDepth(currentNode->left),maxDepth(currentNode->right));
+}

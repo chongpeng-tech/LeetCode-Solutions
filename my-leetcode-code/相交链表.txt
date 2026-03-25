@@ -1,0 +1,36 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+struct ListNode *getIntersectionNode(struct ListNode *headA, struct ListNode *headB) {
+    if(headA==NULL||headB==NULL){
+        return NULL;
+    }
+    int flag = 0;
+    struct ListNode* A = headA;
+    struct ListNode* B = headB;
+    //各遍历一次，消除未相交前两个链表节点数不等的影响
+    //判断条件应是A和B两个指针的地址是否相等，而不是节点里面的值是否相等
+    while(A!=B){
+        if(A!=NULL){
+            A = A->next;
+        }else{
+            A = headB;
+            flag++;
+        }
+        if(B!=NULL){
+            B = B->next;
+            
+        }else{
+            B = headA;
+            flag++;
+        }
+        if(flag>=3){
+            return NULL;
+        }
+    }
+    return A;
+}

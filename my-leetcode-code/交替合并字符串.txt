@@ -1,0 +1,29 @@
+char* mergeAlternately(char* word1, char* word2) {
+    int len_word1 = strlen(word1);
+    int len_word2 = strlen(word2);
+    int len = len_word1+len_word2;
+    char* result = (char*)malloc(len+1);
+    int p1 = 0;
+    int p2 = 0;
+    int i = 0;
+    while(p1<len_word1||p2<len_word2){
+        //int i = 0; 唉，又定义在循环里面了
+        if(i>=len){
+            break;
+        }
+        if(p1<len_word1){
+            result[i] = word1[p1];
+            p1++;
+            i++;
+        }
+        if(p2<len_word2){
+            result[i] = word2[p2];
+            p2++;
+            i++;
+        }
+    }
+    result[len] ='\0';
+
+    return result;
+}
+    

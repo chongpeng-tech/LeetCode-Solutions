@@ -1,0 +1,41 @@
+double findMedianSortedArrays(int* nums1, int nums1Size, int* nums2, int nums2Size) {
+    int arr[nums1Size+nums2Size];
+    int index_1 = 0;
+    int index_2 = 0;
+    int i = 0;
+    while(index_1<nums1Size||index_2<nums2Size){
+        if(index_1<nums1Size&&index_2==nums2Size){
+            arr[i] = nums1[index_1];
+            i++;
+            index_1++;
+        }
+        if(index_1==nums1Size&&index_2<nums2Size){
+            arr[i] = nums2[index_2];
+            i++;
+            index_2++;
+        }
+        if(index_1<nums1Size&&index_2<nums2Size){
+            if(nums1[index_1]<=nums2[index_2]){
+                arr[i] = nums1[index_1];
+                index_1++;
+                i++;
+            }else{
+                arr[i] = nums2[index_2];
+                index_2++;
+                i++;
+            }
+        }
+    }
+    int sum = nums1Size + nums2Size;
+    if(sum%2==0){
+        int m1 = (sum - 1)/2;
+        int m2 = m1 + 1;
+        double mid_1 = arr[m1];
+        double mid_2 = arr[m2];
+        return (mid_1+mid_2)/2;
+    }else{
+        int m = (sum - 1)/2;
+        double mid = arr[m];
+        return mid;
+    }
+}

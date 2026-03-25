@@ -1,0 +1,20 @@
+bool searchMatrix(int** matrix, int matrixSize, int* matrixColSize, int target) {
+    //先考虑特殊情况
+    int colSize = matrixColSize[0];
+    int index = 0;
+
+    while(index<matrixSize){
+        if(matrix[index][colSize-1]<target){
+            index++;
+        }else{
+            //可以改为二分查找，降低时间复杂度
+            for(int i = 0;i<colSize;i++){
+                if(matrix[index][i]==target){
+                    return true;
+                }
+            }
+            break;
+        }
+    }
+    return false;
+}

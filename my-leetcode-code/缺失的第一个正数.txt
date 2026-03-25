@@ -1,0 +1,28 @@
+int firstMissingPositive(int* nums, int numsSize) {
+    int firstMissingPositive = numsSize+1;
+    int i = 0;
+    while(1){
+           
+    if(nums[i]>0&&nums[i]<numsSize+1&&nums[i]!=nums[nums[i]-1]&&nums[i]!=i+1){
+            int temp = nums[nums[i]-1];
+            nums[nums[i]-1] = nums[i];
+            nums[i] = temp;
+        } //调整数组，哈希表？
+    if(nums[i]<=0||nums[i]>=numsSize+1||nums[i]==nums[nums[i]-1]||nums[i]==i+1){
+            i++;
+        }
+        if(i>=numsSize){
+            break;
+        }
+        
+    }
+    int j = 0;
+    while(j<numsSize){
+        if(nums[j]!=j+1){
+            firstMissingPositive = j+1;
+            break;
+        }
+        j++;
+    }
+    return firstMissingPositive;
+}

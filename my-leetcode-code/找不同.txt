@@ -1,0 +1,22 @@
+char findTheDifference(char* s, char* t) {
+    int word_map[26] = {0};
+    int len_s = strlen(s);
+    int len_t = len_s+1;
+    for(int i = 0;i<len_t;i++){
+        int index = t[i] - 'a';
+        word_map[index] = word_map[index] + 1;
+    }
+    for(int i = 0;i<len_s;i++){
+        int index = s[i] - 'a';
+        word_map[index] = word_map[index] - 1;
+    }
+    int scanNum = 0;
+    while(scanNum<26){
+        if(word_map[scanNum]==1){
+            break;
+        }
+        scanNum++;
+    }
+    char add = scanNum + 'a';
+    return add;
+}

@@ -1,0 +1,25 @@
+int subtractProductAndSum(int n) {
+    int product = 1;
+    int sum = 0;
+    int digit = 1;
+    int a = 10;
+    while(1){
+        if(a>n){
+            break;
+        }else{
+            a = a*10;
+            digit = digit + 1;
+        }
+    }
+    int temp = n;
+    for(int i = 0;i<digit;i++){
+        int c = temp%10;
+        temp = (temp-temp%10)/10;
+        product = product * c;
+        sum = sum + c;
+    }
+    int result = product-sum;
+   return result;
+}
+
+

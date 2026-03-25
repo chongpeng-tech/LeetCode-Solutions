@@ -1,0 +1,35 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+int countNode(struct TreeNode* root){
+    if(root==NULL){
+        return 0;
+    }else{
+        return 1+countNode(root->left)+countNode(root->right);
+    }
+}
+void preOrder(struct TreeNode* root,int Arr[],int* pointer){
+    
+    if(root!=NULL){
+        Arr[(*pointer)] = root->val;
+        (*pointer)++;
+        preOrder(root->left,Arr,pointer);
+        preOrder(root->right,Arr,pointer);
+    }
+}
+//returnSize是要求的的东西，给了地址，执行完函数直接写进去！
+int* preorderTraversal(struct TreeNode* root, int* returnSize) {
+    *returnSize = countNode(root);
+    int* Arr = (int*)malloc((*returnSize)*sizeof(int));
+    int pointer = 0;
+    preOrder(root,Arr,&pointer);
+    return Arr;
+}

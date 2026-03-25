@@ -1,0 +1,14 @@
+int maxProfit(int* prices, int pricesSize) {
+    int maxProfit = 0;
+    int lowprice = prices[0];
+    for(int i = 0;i<pricesSize;i++){
+        if(prices[i]<lowprice&&i!=pricesSize-1){
+            lowprice = prices[i];
+        }
+        if(maxProfit<prices[i]-lowprice){
+            maxProfit = prices[i]-lowprice;
+        }
+
+        
+    }return maxProfit;
+}

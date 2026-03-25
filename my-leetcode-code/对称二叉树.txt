@@ -1,0 +1,33 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+bool isSameTree(struct TreeNode* p, struct TreeNode* q) {
+    // 若两个节点都为空，说明当前位置相同
+    if (p == NULL && q == NULL) return true;
+    
+    // 若一个为空另一个不为空，说明不相同
+    if (p == NULL || q == NULL) return false;
+    
+    // 若当前节点值相同，再递归比较左右子树
+    return (p->val == q->val) && isSameTree(p->left, q->right) && isSameTree(p->right, q->left);
+}
+bool isSymmetric(struct TreeNode* root) {
+    if(root==NULL){
+        return false;
+    }
+   
+    if(root->left==NULL&&root->right==NULL){
+        return true;
+    }
+    //根据顺序执行可以优化代码判断逻辑
+    if(root->left==NULL||root->right==NULL){
+        return false;
+    }
+    
+    return isSameTree(root->left,root->right);
+}

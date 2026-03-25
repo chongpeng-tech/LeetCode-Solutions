@@ -1,0 +1,12 @@
+void rotate(int* nums, int numsSize, int k) {
+    int tempnums[numsSize];
+    for(int i = 0;i<numsSize;i++){
+        tempnums[i] = nums[i];
+    }
+    for(int i = 0;i<numsSize;i++){
+        //原元素下标加k对numsSize取余等于新的位置
+        //tempnums[i] 新位置是(i+k)%numsSize
+        int dest = (i+k)%numsSize;
+        nums[dest] = tempnums[i];
+    }
+}

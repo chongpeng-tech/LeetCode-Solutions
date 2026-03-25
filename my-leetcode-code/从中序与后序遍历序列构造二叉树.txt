@@ -1,0 +1,39 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+struct TreeNode* build(int* postorder,int* inorder,int* nextRoot,int f,int r,int f1,int r1){
+    if(f>r||f1>r1){
+        return NULL;
+    }
+    if(f1==r1){
+        struct TreeNode* node = (struct TreeNode*)malloc(sizeof(struct TreeNode));
+        node->val = postorder[r];
+        node->left = NULL;
+        node->right = NULL;//必须初始化，不然有野指针
+        return node;
+    }
+    struct TreeNode* node = (struct TreeNode*)malloc(sizeof(struct TreeNode));
+    node->val = postorder[r];
+    int rightSize = r1-nextRoot[r];
+    int rootIndex = nextRoot[r];
+    node->right = build(postorder,inorder,nextRoot,r-rightSize,r-1,rootIndex+1,r1);
+    node->left = build(postorder,inorder,nextRoot,f,r-rightSize-1,f1,rootIndex-1);
+    return node;
+}
+struct TreeNode* buildTree(int* inorder, int inorderSize, int* postorder, int postorderSize) {
+    int* nextRoot = (int*)malloc(sizeof(int)*postorderSize);
+    for(int i = 0;i<postorderSize;i++){
+        for(int j = 0;j<inorderSize;j++){
+            if(postorder[i] == inorder[j]){
+                nextRoot[i] = j;
+                break;
+            }
+        }
+    }
+    return build(postorder,inorder,nextRoot,0,postorderSize-1,0,inorderSize-1);
+}

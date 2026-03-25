@@ -1,0 +1,61 @@
+typedef struct stacknode {
+    char data;
+    struct stacknode* next;
+} stacknode;
+
+typedef struct {
+    stacknode* top;
+} LinkStact;
+
+void InitStack(LinkStact* ls) {
+    ls->top = NULL;
+}
+
+void push(LinkStact* s, char x) {
+    stacknode* node = (stacknode*)malloc(sizeof(stacknode));
+    node->data = x;
+    node->next = s->top;
+    s->top = node;
+}
+
+char pop(LinkStact* ls) {
+    stacknode* p = NULL;
+    char x = '\0';
+    if (ls->top != NULL) {
+        x = ls->top->data;
+        p = ls->top;
+        ls->top = p->next;
+        free(p);
+    }
+    return x;
+}
+
+bool isValid(char* s) {
+    LinkStact* ls = (LinkStact*)malloc(sizeof(LinkStact));
+    InitStack(ls);
+    
+    for (int i = 0; i < strlen(s); i++) {
+        if (s[i] == '(' || s[i] == '{' || s[i] == '[') {
+            push(ls, s[i]);
+        } else if (s[i] == ')') {
+            if (pop(ls) != '(') {
+                free(ls);
+                return false;
+            }
+        } else if (s[i] == '}') {
+            if (pop(ls) != '{') {
+                free(ls);
+                return false;
+            }
+        } else if (s[i] == ']') {
+            if (pop(ls) != '[') {
+                free(ls);
+                return false;
+            }
+        }
+    }
+    
+    bool result = (ls->top == NULL);
+    free(ls);
+    return result;
+}

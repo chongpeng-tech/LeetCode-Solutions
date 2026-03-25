@@ -1,0 +1,18 @@
+void moveZeroes(int* nums, int numsSize) {
+    int i = 0;
+    int dest = 0;//非零元交换目的位置＆非零元个数
+    while(i<numsSize){
+        if(nums[i]==0){
+            i++;
+        }
+        else{
+            nums[dest] = nums[i];
+            dest++;
+            i++;
+        }
+
+    }
+    for(int i = dest;i<numsSize;i++){
+        nums[i] = 0;
+    }
+}

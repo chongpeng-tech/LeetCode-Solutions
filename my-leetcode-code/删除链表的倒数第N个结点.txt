@@ -1,0 +1,28 @@
+
+struct ListNode* removeNthFromEnd(struct ListNode* head, int n) {
+    // 要减少时间复杂度通常需要额外的空间，如一遍扫码通常就要两个以上的指针
+    // int front = 0;
+    // int rear = front+n; 要删除元素的前后两个指针
+
+    struct ListNode* front = head;
+    struct ListNode* rear = head;
+    for (int i = 0; i < n; i++) {
+        rear = rear->next;
+    }
+    if(rear==NULL){
+        struct ListNode* Newhead = head->next;
+        free(head);
+        return Newhead;
+    }
+    while ((rear->next) != NULL) {
+
+        front = front->next;
+        rear = rear->next;
+    }
+    struct ListNode* tempNode = front->next;
+    
+    front->next = tempNode->next;
+    tempNode->next = NULL;
+    free(tempNode);
+    return head;
+}

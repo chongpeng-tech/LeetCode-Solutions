@@ -1,0 +1,21 @@
+int countOdds(int low, int high) {
+    int a = high - low + 1;
+    if(a%2==0){
+        int case1;
+        case1 = a/2;
+        return case1;
+    }
+    if(a%2!=0&&low%2!=0){
+        //printf("%d",(a+1)/2);
+        int case2;
+        case2 = (a+1)/2;
+        return case2;
+    }
+    else{
+        //printf("%d",(a-1)/2);
+        int case3;
+        case3 = (a-1)/2;
+        return case3;
+    }
+
+}

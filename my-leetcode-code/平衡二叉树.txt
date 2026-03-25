@@ -1,0 +1,54 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+// 求节点最大深度
+static bool flag;
+int getDepth(struct TreeNode* root) {
+    if (root == NULL) {
+        return 0;
+    }
+    int L = getDepth(root->left);
+    int R = getDepth(root->right);
+    int maxDepth = (L > R) ? L : R;
+    return 1 + maxDepth;
+}
+void preorder(struct TreeNode* root){
+    if(root == NULL){
+        return;
+    }
+    int L_depth = getDepth(root->left);
+    int R_depth = getDepth(root->right);
+    if(abs(L_depth - R_depth) > 1){
+        flag = false;
+    }
+    preorder(root -> left);
+    preorder(root ->right);
+}
+//效率太低，更换辅助函数
+int DFS(struct TreeNode* root){
+    if(root == NULL){
+        return 0;
+    }
+    int L = DFS(root -> left);
+    if(L == -1){
+        return -1;
+    }
+    int R = DFS(root -> right);
+    if(R == -1){
+        return -1;
+    }
+    if(abs(L - R) > 1){
+        return -1;
+    }
+    return 1 + (L > R? L : R);
+}
+bool isBalanced(struct TreeNode* root) {
+
+   
+    return DFS(root)!= -1;
+}

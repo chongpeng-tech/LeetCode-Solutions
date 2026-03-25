@@ -1,0 +1,51 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+bool isLeaf(struct TreeNode* node){
+    if(node->left==NULL&&node->right==NULL){
+        return true;
+    }else{
+        return false;
+    }
+}
+int countNodes(struct TreeNode* root){
+    if(root==NULL){
+        return 0;
+    }else{
+        return 1 + countNodes(root->left) + countNodes(root->right);
+    }
+
+}
+void inorder(struct TreeNode* root,long* isValid,int* index){
+    if(root==NULL){
+        return;
+    }
+    inorder(root->left,isValid,index);
+    isValid[(*index)++] = root->val;
+    inorder(root->right,isValid,index);
+}
+bool isValidBST(struct TreeNode* root) {
+    if(root==NULL){
+        return true;
+    }
+    int nodeCounts = countNodes(root);
+    long* isValid = (long*)malloc(sizeof(long)*nodeCounts);
+    int index = 0;
+    inorder(root,isValid,&index);
+    long currentMax = (long)INT_MIN - 1L;
+    for(int i = 0;i<nodeCounts;i++){
+        if(currentMax>=isValid[i]){//严格递增
+            free(isValid);
+            return false;
+        }else{
+            currentMax = isValid[i];
+        }
+    }
+    free(isValid);
+    return true;
+}

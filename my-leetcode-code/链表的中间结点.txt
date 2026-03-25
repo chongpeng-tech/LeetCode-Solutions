@@ -1,0 +1,35 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+struct ListNode* middleNode(struct ListNode* head) {
+    int len_list = 0;
+    struct ListNode* currerntNode = head;
+    if(head->next==NULL){
+        return head;
+    }
+    //先找出链表的长度
+    while(currerntNode!=NULL){
+        currerntNode = currerntNode->next;
+        len_list++;
+    }
+    if(len_list%2!=0){
+        //基数个节点，返回中间的节点
+        currerntNode = head;
+        for(int i = 0;i<len_list/2;i++){
+            currerntNode = currerntNode->next;
+        }
+        return currerntNode;
+    }else{
+        //偶数个节点返回第二个中间节点
+        currerntNode = head;
+        for(int i = 0;i<len_list/2;i++){
+            currerntNode = currerntNode->next;
+        }
+        return currerntNode;
+    }
+
+}

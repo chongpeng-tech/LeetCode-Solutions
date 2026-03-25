@@ -1,0 +1,41 @@
+/**
+* Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+void enqueue(struct ListNode* list,struct ListNode** rear,int x){
+    struct ListNode* newNode = (struct ListNode*)malloc(sizeof(struct ListNode));
+    newNode->val = x;
+    newNode->next = NULL;
+    (*rear)->next = newNode;
+    (*rear) = (*rear)->next;
+}
+
+struct ListNode* mergeTwoLists(struct ListNode* list1, struct ListNode* list2) {
+    struct ListNode* pointer_list1 = list1;
+    struct ListNode* pointer_list2 = list2;
+    struct ListNode* listHead = (struct ListNode*)malloc(sizeof(struct ListNode));
+    listHead->next = NULL;
+    struct ListNode* rear = listHead;
+    while(pointer_list1!=NULL||pointer_list2!=NULL){
+        if(pointer_list1==NULL&&pointer_list2!=NULL){
+            enqueue(listHead,&rear,pointer_list2->val);
+            pointer_list2 = pointer_list2->next;
+        }else if(pointer_list1!=NULL&&pointer_list2==NULL){
+            enqueue(listHead,&rear,pointer_list1->val);
+            pointer_list1 = pointer_list1->next;
+        }
+        if(pointer_list1!=NULL&&pointer_list2!=NULL&&pointer_list1->val>=pointer_list2->val){
+            enqueue(listHead,&rear,pointer_list2->val);
+            pointer_list2 = pointer_list2->next;
+        }else if(pointer_list1!=NULL&&pointer_list2!=NULL&&pointer_list1->val<pointer_list2->val){
+            enqueue(listHead,&rear,pointer_list1->val);
+            pointer_list1 = pointer_list1->next;
+        }
+    }
+    struct ListNode* result = listHead->next;
+    free(listHead);
+    return result;
+}

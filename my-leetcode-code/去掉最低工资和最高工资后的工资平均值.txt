@@ -1,0 +1,28 @@
+double average(int* salary, int salarySize){
+    double highestSalary = salary[0];
+    double lowestSalary = salary[0];
+    for(int i = 0;i<salarySize;i++){
+        //highestSalary = salary[0]; 循环里的赋值要慎重啊！
+        if(highestSalary<salary[i]){
+            highestSalary = salary[i];
+        }
+    }
+    for(int i = 0;i<salarySize;i++){
+        //lowestSalary = salary[0];
+        if(lowestSalary>salary[i]){
+            lowestSalary = salary[i];
+        }
+    }
+    double addition = 0;
+    for(int i = 0;i<salarySize;i++){
+        addition = addition + salary[i];
+
+    }
+    double averageSalary;
+    double validSalary;
+    double validNumber;
+    validSalary = addition-lowestSalary-highestSalary;
+    validNumber = salarySize - 2;
+    averageSalary = validSalary/validNumber;
+    return averageSalary;
+}

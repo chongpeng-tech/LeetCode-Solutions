@@ -1,0 +1,41 @@
+char* addBinary(char* a, char* b) {
+    // 获取字符串长度
+    int len_a = strlen(a);
+    int len_b = strlen(b);
+    int i, j;
+    i = len_a - 1;
+    j = len_b - 1;
+    int maxLen;
+    if (len_a >= len_b) {
+        maxLen = len_a;
+    } else {
+        maxLen = len_b;
+    }
+    char* res = (char*)malloc((maxLen + 2) * sizeof(char));
+    int pos = maxLen + 1;
+    res[pos--] = '\0';
+    int carry = 0;
+    while (i >= 0 || j >= 0 || carry) {
+        int temp_A, temp_B;
+        if (i >= 0) {
+            temp_A = a[i] - '0';
+            i--;
+        } else {
+            temp_A = 0;
+        }
+        if (j >= 0) {
+            temp_B = b[j] - '0';
+            j--;
+        } else {
+            temp_B = 0;
+        }
+        int sum = temp_A + temp_B + carry;
+        res[pos--] = (sum % 2) + '0';
+        carry = sum / 2;
+    }
+    //return res + pos + 1;
+    //返回的结果不能free，有内存泄露的巨大风险
+    char* result = strdup(res + pos + 1);
+    free(res);
+    return result;
+}

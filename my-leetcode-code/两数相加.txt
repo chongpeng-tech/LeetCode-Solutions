@@ -1,0 +1,132 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+void Enqueue(struct ListNode* head, struct ListNode** rear, int x) {
+    struct ListNode* newNode =
+        (struct ListNode*)malloc(sizeof(struct ListNode));
+    newNode->next = NULL;
+    newNode->val = x;
+    (*rear)->next = newNode;
+    (*rear) = newNode;
+} // 尾插法创建新链表
+struct ListNode* addTwoNumbers(struct ListNode* l1, struct ListNode* l2) {
+    struct ListNode* nummyNode =
+        (struct ListNode*)malloc(sizeof(struct ListNode));
+    nummyNode->next = NULL;
+    struct ListNode* rear = nummyNode;
+    struct ListNode* pointerL1 = l1;
+    struct ListNode* pointerL2 = l2;
+    int carry = 0;
+    while (pointerL1 != NULL || pointerL2 != NULL) {
+        if (pointerL1 != NULL && pointerL2 == NULL) {
+            if (carry != 0) {
+                int temp = carry + pointerL1->val;
+                if (temp >= 10) {
+                    temp = temp % 10;
+                    Enqueue(nummyNode, &rear, temp);
+                    carry = 1;
+                    pointerL1 = pointerL1->next;
+                } else {
+                    Enqueue(nummyNode, &rear, temp);
+                    carry = 0;
+                    pointerL1 =pointerL1->next;
+                }
+            } else {
+                int temp = pointerL1->val;
+                Enqueue(nummyNode, &rear, temp);
+                pointerL1 = pointerL1->next;
+            }
+        }
+        if (pointerL1 == NULL && pointerL2 != NULL) {
+            if (carry != 0) {
+                int temp = carry + pointerL2->val;
+                if (temp >= 10) {
+                    temp = temp % 10;
+                    Enqueue(nummyNode, &rear, temp);
+                    carry = 1;
+                    pointerL2 = pointerL2->next;
+                } else {
+                    Enqueue(nummyNode, &rear, temp);
+                    carry = 0;
+                    pointerL2 = pointerL2->next;
+                }
+            } else {
+                int temp = pointerL2->val;
+                Enqueue(nummyNode, &rear, temp);
+                pointerL2 = pointerL2->next;
+            }
+        }
+        if (pointerL1 != NULL && pointerL2 != NULL) {
+            if (carry != 0) {
+                int temp = carry + pointerL1->val + pointerL2->val;
+                if (temp >= 10) {
+                    temp = temp % 10;
+                    Enqueue(nummyNode, &rear, temp);
+                    carry = 1;
+                    pointerL1 = pointerL1->next;
+                    pointerL2 = pointerL2->next;
+                } else {
+                    Enqueue(nummyNode, &rear, temp);
+                    carry = 0;
+                    pointerL1 = pointerL1->next;
+                    pointerL2 = pointerL2->next;
+                }
+            } else {
+                int temp = pointerL1->val + pointerL2->val;
+                if (temp >= 10) {
+                    temp = temp % 10;
+                    Enqueue(nummyNode, &rear, temp);
+                    carry = 1;
+                    pointerL1 = pointerL1->next;
+                    pointerL2 = pointerL2->next;
+                } else {
+                    Enqueue(nummyNode, &rear, temp);
+                    carry = 0;
+                    pointerL1 = pointerL1->next;
+                    pointerL2 = pointerL2->next;
+                }
+            }
+        }
+    }
+    if(carry!=0){
+        Enqueue(nummyNode,&rear,1);
+    }
+    struct ListNode* result = nummyNode->next;
+    free(nummyNode);
+    return result;
+}
+
+/*
+struct ListNode* addTwoNumbers(struct ListNode* l1, struct ListNode* l2) {
+    struct ListNode* pointerL1 = l1;
+    struct ListNode* pointerL2 = l2;
+    while(pointerL1!=NULL&&pointerL2!=NULL){
+        int tempNUM = pointerL2->val;
+        pointerL1->val = (pointerL1->val) + tempNUM;
+        if(pointerL1->val<10){
+            pointerL1 = pointerL1->next;
+            pointerL2 = pointerL2->next;
+            continue;
+        }else{
+            pointerL1->val = (pointerL1->val)%10;
+            pointerL1->next->val++;
+            pointerL1 = pointerL1->next;
+            pointerL2 = pointerL2->next;
+        }
+
+    }/*if(pointerL1!=NULL&&pointerL1->val>=10){
+        while(pointerL1!=NULL&&pointerL1->next!=0){
+            if(pointerL1->val>=10){
+            pointerL1->val = (pointerL1->val)%10;
+            pointerL1->next->val++;
+            pointerL1 = pointerL1->next;
+            }
+        }
+    }
+
+    return l1;
+}*/

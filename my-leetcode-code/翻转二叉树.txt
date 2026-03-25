@@ -1,0 +1,34 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+bool isLeafNode(struct TreeNode* node){
+    if(node->left==NULL&&node->right==NULL){
+        return true;
+    }else{
+        return false;
+    }
+} 
+void inverttree(struct TreeNode* root){
+    struct TreeNode* node = root;
+    if(node==NULL){
+        return;//判断是否为空节点是必写的
+    }
+    if(isLeafNode(node)){
+        return;//叶子节点直接回退
+    }
+    struct TreeNode* tempNode = node->left;
+    node->left = node->right;
+    node->right = tempNode;
+    inverttree(node->left);
+    inverttree(node->right);
+}
+struct TreeNode* invertTree(struct TreeNode* root) {
+    
+    inverttree(root);
+    return root;
+}

@@ -1,0 +1,46 @@
+//获取整数位数
+int getDigit(int x){
+    if(x==0){
+        return 1;
+    }else{
+        int count = 0;
+        int num;
+        num = x;
+        while(num>0){
+            num = num / 10;
+            count++;
+        }
+        return count;
+    }
+}
+//按顺序将每一位的数字压入栈
+
+
+
+bool isPalindrome(int x) {
+    if(x < 0){
+        return false;
+    }
+    int digit = getDigit(x);
+    int* Arr = (int*)malloc(sizeof(int)*digit);
+    int num = x;
+    int tempdigit = digit;
+    while(tempdigit > 0){
+        int Digit = num % 10;
+        Arr[tempdigit - 1] = Digit;
+        num = (num - Digit) / 10;
+        tempdigit--; 
+    }
+    //双指针验证
+    int head = 0;
+    int rear = digit - 1;
+    while(head < rear){
+        if(Arr[head]==Arr[rear]){
+            head++;
+            rear--;
+        }else{
+            return false;
+        }
+    }
+    return true;      
+}

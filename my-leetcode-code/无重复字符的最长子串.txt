@@ -1,0 +1,23 @@
+int lengthOfLongestSubstring(char* s) {
+    int hashArr[128];
+    memset(hashArr, -1, sizeof(hashArr));
+    int left = 0;
+    int right = 0;
+    int len_s = strlen(s);
+    int currentLen = 0;
+    int maxLen = 0;
+
+    for (right; right < len_s; right++) {
+        char currentChar = s[right];
+
+        if(hashArr[currentChar]!=-1&&hashArr[currentChar]>=left){
+            left = hashArr[currentChar]+1;
+        }
+        hashArr[currentChar] = right;
+        currentLen = right - left + 1;
+        if (currentLen > maxLen) {
+            maxLen = currentLen;
+        }
+    }
+    return maxLen;
+}

@@ -1,0 +1,62 @@
+int search(int* nums, int numsSize, int target) {
+    // 先要寻找到逆转的点
+    int reversePoint = 0;
+    int left = 0;
+    int right = numsSize - 1;
+    if(nums==NULL){
+        return -1;
+    }
+    if(numsSize==1){
+        if(target==nums[0]){
+            return 0;
+        }else{
+            return -1;
+        }
+    }
+    if(nums[left]<nums[right]){
+        reversePoint = numsSize - 1;
+    }else{
+    while (left < right) {
+        /*int mid = left + (right - left) / 2;
+        if (mid+1<=numsSize-1&& nums[mid] > nums[mid + 1]) {
+            reversePoint = mid;
+            break;
+        } else if (mid+1<numsSize-1&& nums[mid] >= nums[left] && nums[mid + 1] > nums[mid]) {
+            left = mid + 1;
+        } else if (mid-1>=0&&nums[mid] < nums[left] && nums[mid - 1] < nums[mid]) {
+            right = mid - 1;
+        }
+    }
+    */
+    int mid = left + (right - left) / 2;
+    if(nums[mid]>nums[right]){
+        left = mid + 1;
+    }else{
+        right = mid;
+    }
+    reversePoint = left -1;
+   }
+}
+    if(target>=nums[0]){
+        left = 0;
+        right = reversePoint;
+    }else{
+        left = reversePoint + 1;
+        right = numsSize - 1;
+    }
+    if(left>right){
+        return -1;
+    }
+    while(left<=right){
+        int mid = left + (right - left)/2;
+        if(nums[mid]==target){
+            return mid;
+        }else if(nums[mid]>target){
+            right = mid - 1;
+        }else{
+            left = mid + 1;
+        }
+
+    }
+    return -1;
+}

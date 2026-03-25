@@ -1,0 +1,29 @@
+struct TreeNode* build(int* preorder,int* inorder,int* rootNext,int f,int r,int f1,int r1){
+    if(f>r||f1>r1){
+        return NULL;
+    }
+    if(f==r||f1==r1){
+        struct TreeNode* node =(struct TreeNode*)malloc(sizeof(struct TreeNode));
+        node->left = NULL;
+        node->right = NULL;
+        node->val = preorder[f];
+        return node;
+    }
+    struct TreeNode* node = (struct TreeNode*)malloc(sizeof(struct TreeNode));
+    node->val = preorder[f];
+    int leftSize = rootNext[f] - f1;
+    node->left = build(preorder,inorder,rootNext,f+1,f+leftSize,f1,rootNext[f]-1);
+    node->right = build(preorder,inorder,rootNext,f+leftSize+1,r,f1+leftSize+1,r1);
+    return node; 
+} 
+struct TreeNode* buildTree(int* preorder, int preorderSize, int* inorder, int inorderSize) {
+    int* rootNext = (int*)malloc(sizeof(int)*preorderSize);
+    for(int i = 0;i<preorderSize;i++){
+        for(int j = 0;j<inorderSize;j++){
+            if(preorder[i]==inorder[j]){
+                rootNext[i] = j;
+            }
+        }
+    }
+    return build(preorder,inorder,rootNext,0,preorderSize-1,0,inorderSize-1);
+}

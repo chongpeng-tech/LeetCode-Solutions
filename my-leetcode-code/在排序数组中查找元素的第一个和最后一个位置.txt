@@ -1,0 +1,40 @@
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+int* searchRange(int* nums, int numsSize, int target, int* returnSize) {
+    *returnSize = 2;//初始化需返回的东西，不然函数执行不成功
+    int* result = (int*)malloc(sizeof(int) * (*returnSize));
+    result[0] = -1;
+    result[1] = -1;
+    if (nums == NULL) {
+
+        return result;
+    }
+    int left = 0;
+    int right = numsSize - 1;
+    while(left<=right){
+        int mid = left + (right - left)/2;
+        if(nums[mid]==target){
+            int bound_left = mid;
+            int bound_right = mid;
+            while((bound_right+1<=numsSize-1&&nums[bound_right+1]==target)||(bound_left-1>=0&&nums[bound_left-1]==target)){
+                if(bound_left-1>=0&&nums[bound_left-1]==target){
+                    bound_left = bound_left - 1;
+                }
+                if(bound_right+1<=numsSize-1&&nums[bound_right+1]==target){
+                    bound_right = bound_right + 1;
+                }
+            }
+            result[0] = bound_left;
+            result[1] = bound_right;
+            return result;
+        }
+        else if(nums[mid]>target){
+            right = mid - 1;
+        }else{
+            left = mid + 1;
+        }
+        
+    }
+    return result;
+}
