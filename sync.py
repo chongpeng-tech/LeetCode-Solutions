@@ -2,7 +2,6 @@ import os
 import requests
 import time
 
-# 从 GitHub 保险箱获取密钥
 SESSION = os.environ.get('LEETCODE_SESSION')
 CSRF = os.environ.get('LEETCODE_CSRF_TOKEN')
 
@@ -16,30 +15,31 @@ HEADERS = {
 }
 
 def fetch_data():
-    print("准备解除封印，开始全量翻页抓取...")
+    print("准备开始全量抓取...")
     
     offset = 0
-    limit = 40 # 每次拿40条记录，像翻书一样
+    limit = 40
     all_submissions = []
     
-    # 【新增功能 1：自动翻页】
+    # 1. 翻页获取清单（加了防崩溃保护）
     while True:
         list_url = f"https://leetcode.cn/api/submissions/?offset={offset}&limit={limit}"
         print(f"正在查看第 {offset} 到 {offset+limit} 条历史记录...")
-        
-        response = requests.get(list_url, headers=HEADERS)
-        if response.status_code != 200:
-            print("获取清单失败，停止翻页。")
+        try:
+            # timeout=10 表示如果等了 10 秒力扣还不理我，就放弃，别死等
+            response = requests.get(list_url, headers=HEADERS, timeout=10)
+            if response.status_code != 200:
+                break
+            page_data = response.json().get('submissions_dump', [])
+            if not page_data:
+                break
+            all_submissions.extend(page_data)
+            offset += limit
+            time.sleep(1)
+        except Exception as e:
+            print(f"⚠️ 获取清单时网络波动: {e}")
             break
             
-        page_data = response.json().get('submissions_dump', [])
-        if not page_data:
-            break # 翻到底了，没有数据了，退出循环
-            
-        all_submissions.extend(page_data)
-        offset += limit
-        time.sleep(1) # 翻页停顿一下，防止被封
-        
     print(f"清单整理完毕！一共找到了 {len(all_submissions)} 条历史记录！")
     
     if not os.path.exists("my-leetcode-code"):
@@ -47,16 +47,23 @@ def fetch_data():
         
     graphql_url = "https://leetcode.cn/graphql/"
     
-    # 【新增功能 2：去重小本本】记录已经下载过的题目
+    # 2. 【核心升级：断点续传】看看文件夹里已经有哪些题了
     saved_titles = set()
+    for filename in os.listdir("my-leetcode-code"):
+        # 把 ".py" 或 ".cpp" 后缀去掉，只留题目名字
+        name_without_ext = os.path.splitext(filename)[0]
+        saved_titles.add(name_without_ext)
 
+    print(f"发现本地已经保存了 {len(saved_titles)} 道题目，将自动跳过它们。")
+
+    # 3. 开始挨个抓取代码
     for sub in all_submissions:
         if sub.get('status_display') != 'Accepted':
-            continue # 没通过的跳过
+            continue
             
         title = sub.get('title', 'Unknown').replace(" ", "").replace("/", "_")
         
-        # 如果这道题已经在小本本上了，就跳过
+        # 如果已经下载过了，直接跳过！
         if title in saved_titles:
             continue
 
@@ -71,32 +78,39 @@ def fetch_data():
             }
         }
         """
-        res_code = requests.post(
-            graphql_url, 
-            json={"query": query_code, "variables": {"submissionId": str(sub_id)}}, 
-            headers=HEADERS
-        )
         
-        detail = res_code.json().get('data', {}).get('submissionDetail', {})
+        # 【核心升级：给单次抓取穿上防弹衣】
+        try:
+            res_code = requests.post(
+                graphql_url, 
+                json={"query": query_code, "variables": {"submissionId": str(sub_id)}}, 
+                headers=HEADERS,
+                timeout=10 # 最多等 10 秒
+            )
+            
+            detail = res_code.json().get('data', {}).get('submissionDetail', {})
+            
+            if detail and detail.get('code'):
+                code = detail['code']
+                lang = detail['lang']
+                
+                ext = "py" if "python" in lang else "cpp" if lang == "cpp" else "txt"
+                
+                with open(f"my-leetcode-code/{title}.{ext}", "w", encoding="utf-8") as f:
+                    f.write(code)
+                print(f"✅ {title} 保存成功！")
+                saved_titles.add(title) # 存完记到小本本上
+            else:
+                print(f"❌ {title} 提货失败。")
+                
+        except Exception as e:
+            # 如果这道题超时了，只打印警告，绝不崩溃，继续下一道！
+            print(f"⚠️ {title} 抓取时网络超时，先跳过: {e}")
+            
+        # 把休息时间稍微延长到 2 秒，对力扣服务器温柔一点
+        time.sleep(2) 
         
-        if detail and detail.get('code'):
-            code = detail['code']
-            lang = detail['lang']
-            
-            ext = "py" if "python" in lang else "cpp" if lang == "cpp" else "txt"
-            
-            with open(f"my-leetcode-code/{title}.{ext}", "w", encoding="utf-8") as f:
-                f.write(code)
-            print(f"✅ {title} 保存成功！")
-            
-            # 记录到小本本上，下次遇到同名的就不抓了
-            saved_titles.add(title)
-        else:
-            print(f"❌ {title} 提货失败。")
-            
-        time.sleep(1.5) 
-        
-    print(f"🎉 任务圆满结束！一共成功保存了 {len(saved_titles)} 道题目的代码！")
+    print("🎉 本次运行结束！")
 
 if __name__ == "__main__":
     fetch_data()
