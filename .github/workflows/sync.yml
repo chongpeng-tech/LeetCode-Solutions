@@ -1,20 +1,36 @@
-name: LeetCode Sync
+name: Custom LeetCode Sync
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 16 * * *" 
+    - cron: "0 16 * * *"
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Sync LeetCode CN
-        uses: joshcai/leetcode-sync@v1.7 # 🌟 这里换成了最稳定、最主流的开源工具
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
-          github-token: ${{ github.token }}
-          leetcode-csrf-token: ${{ secrets.LEETCODE_CSRF_TOKEN }}
-          leetcode-session: ${{ secrets.LEETCODE_SESSION }}
-          destination-folder: my-leetcode-code 
-          leetcode-url: https://leetcode.cn
+          python-version: '3.10'
+
+      - name: Install Dependencies
+        run: pip install requests
+
+      - name: Run Python Sync Script
+        env:
+          LEETCODE_SESSION: ${{ secrets.LEETCODE_SESSION }}
+          LEETCODE_CSRF_TOKEN: ${{ secrets.LEETCODE_CSRF_TOKEN }}
+        run: python sync.py
+
+      - name: Commit and Push
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          git add .
+          git commit -m "Auto-sync LeetCode CN submissions" || echo "No changes to commit"
+          git push
